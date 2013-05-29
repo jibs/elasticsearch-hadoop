@@ -22,8 +22,9 @@ import org.apache.hadoop.mapred.JobConf;
 import org.elasticsearch.hadoop.integration.TestSettings;
 import org.elasticsearch.hadoop.mr.ESInputFormat;
 import org.elasticsearch.hadoop.util.TestUtils;
+import org.junit.Ignore;
 import org.junit.Test;
-
+@Ignore
 public class MROldApiSearchTest {
 
     @Test

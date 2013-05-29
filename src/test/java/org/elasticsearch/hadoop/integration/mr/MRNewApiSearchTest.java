@@ -15,16 +15,31 @@
  */
 package org.elasticsearch.hadoop.integration.mr;
 
+import junit.framework.Assert;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.MapWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
+import org.elasticsearch.hadoop.cfg.ConfigurationOptions;
 import org.elasticsearch.hadoop.integration.TestSettings;
 import org.elasticsearch.hadoop.mr.ESInputFormat;
+import org.elasticsearch.hadoop.rest.BufferedRestClient;
+import org.elasticsearch.hadoop.serialization.JdkValueWriter;
 import org.elasticsearch.hadoop.util.TestUtils;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class MRNewApiSearchTest {
+//    @Before
+//    public void start() {
+//
+//    }
+//
+//    @After
+//    public void stop() throws Exception {
+//    }
+
 
     @Test
     public void testBasicSearch() throws Exception {
@@ -43,5 +58,27 @@ public class MRNewApiSearchTest {
         //PrintStreamOutputFormat.stream(conf, Stream.OUT);
 
         job.waitForCompletion(true);
+        Assert.assertTrue(job.isSuccessful());
     }
+
+    @Test
+    public void testSearchLimitedFields() throws Exception {
+        Configuration conf = new Configuration();
+        TestUtils.addProperties(conf, TestSettings.TESTING_PROPS);
+        conf.setBoolean("mapred.used.genericoptionsparser", true);
+        conf.set("mapred.job.tracker", "local");
+        conf.set("es.resource", "mrnewapi/save/_search?q=*&fields=name");
+
+        Job job = new Job(conf);
+        job.setInputFormatClass(ESInputFormat.class);
+        job.setOutputFormatClass(PrintStreamOutputFormat.class);
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(MapWritable.class);
+
+        //PrintStreamOutputFormat.stream(conf, Stream.OUT);
+
+        job.waitForCompletion(true);
+        Assert.assertTrue(job.isSuccessful());
+    }
+
 }

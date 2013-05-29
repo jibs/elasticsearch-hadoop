@@ -30,6 +30,7 @@ import org.elasticsearch.hadoop.integration.TestSettings;
 import org.elasticsearch.hadoop.mr.ESOutputFormat;
 import org.elasticsearch.hadoop.util.TestUtils;
 import org.elasticsearch.hadoop.util.WritableUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class MRNewApiSaveTest {
